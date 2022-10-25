@@ -1,35 +1,13 @@
-import { transactions, utils } from 'near-api-js';
+import { PublicKey } from '../utils';
 
 export interface Account {
   accountId: string;
-  publicKey: utils.PublicKey;
+  publicKey: PublicKey;
 }
 
 export interface Network {
   networkId: string;
   nodeUrl: string;
-}
-
-interface RestoreParams {
-  accountId: string;
-  mnemonic: string;
-}
-
-interface SignInParams {
-  permission: transactions.FunctionCallPermission;
-  accounts: Array<Account>;
-}
-
-interface SignOutParams {
-  accounts: Array<Account>;
-}
-
-interface SignTransactionParams {
-  transaction: transactions.Transaction;
-}
-
-interface SignTransactionsParams {
-  transactions: Array<transactions.Transaction>;
 }
 
 export interface Events {
