@@ -1,4 +1,4 @@
-import { Provider, JsonRpcProvider } from './providers';
+import { Provider, JsonRpcProvider, WalletRpcProvider } from './providers';
 import { Signer, InMemorySigner } from './signer';
 
 /**
@@ -10,6 +10,7 @@ function getProvider(config: any): Provider {
         case undefined:
             return config;
         case 'JsonRpcProvider': return new JsonRpcProvider({ ...config.args });
+        case 'WalletRpcProvider': return new WalletRpcProvider(config.args.wallet);
         default: throw new Error(`Unknown provider type ${config.type}`);
     }
 }
