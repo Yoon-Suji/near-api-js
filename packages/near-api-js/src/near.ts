@@ -14,6 +14,7 @@ import { Signer } from './signer';
 import { PublicKey } from './utils/key_pair';
 import { AccountCreator, LocalAccountCreator, UrlAccountCreator } from './account_creator';
 import { KeyStore } from './key_stores';
+import { Wallet } from './providers/wallet.types';
 
 export interface NearConfig {
     /** Holds {@link utils/key_pair!KeyPair | KeyPairs} for signing transactions */
@@ -81,8 +82,18 @@ export class Near {
     readonly connection: Connection;
     readonly accountCreator: AccountCreator;
 
-    constructor(config: NearConfig) {
+    constructor(config: NearConfig, walletProvider?: Wallet) {
         this.config = config;
+
+        if (walletProvider) {
+            this.connection = Connection.fromConfig({
+                networkId: config.networkId,
+                provider: { type: 'WalletRpcProvider', args: { wallet: walletProvider } },
+                signer: config.signer || { type: 'InMemorySigner', keyStore: config.keyStore },
+                jsvmAccountId: config.jsvmAccountId || `jsvm.${config.networkId}`
+            });
+        }
+
         this.connection = Connection.fromConfig({
             networkId: config.networkId,
             provider: { type: 'JsonRpcProvider', args: { url: config.nodeUrl, headers: config.headers } },

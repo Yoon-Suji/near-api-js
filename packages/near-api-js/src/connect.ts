@@ -26,6 +26,7 @@ import { InMemoryKeyStore, MergeKeyStore } from './key_stores';
 import { Near, NearConfig } from './near';
 import fetch from './utils/setup-node-fetch';
 import { logWarning } from './utils';
+import { Wallet } from './providers/wallet.types';
 
 global.fetch = fetch;
 
@@ -39,7 +40,7 @@ export interface ConnectConfig extends NearConfig {
 /**
  * Initialize connection to Near network.
  */
-export async function connect(config: ConnectConfig): Promise<Near> {
+export async function connect(config: ConnectConfig, walletProvider?: Wallet): Promise<Near> {
     // Try to find extra key in `KeyPath` if provided.
     if (config.keyPath && config.keyStore) {
         try {
@@ -64,5 +65,5 @@ export async function connect(config: ConnectConfig): Promise<Near> {
             logWarning(`Failed to load master account key from ${config.keyPath}: ${error}`);
         }
     }
-    return new Near(config);
+    return new Near(config, walletProvider);
 }
